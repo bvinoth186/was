@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: was9-sadmin
+spec:
+  type: NodePort
+  ports:
+    - port: 9080
+      nodePort: 31230
+      name: http
+    - port: 9043
+      nodePort: 31240
+      name: https 
+  selector:
+    run: was9-sadmin
