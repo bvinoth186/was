@@ -69,6 +69,11 @@ def getName (objectId):
         stIndex = 1
     return objectId[stIndex:endIndex+1]
 
+print "Starting ..."
+
+node = getName(getNodeId(""))
+server = getName(getServerId(""))
+
 print "Enabling TLS1.2 ..."
 AdminTask.listCertStatusForSecurityStandard('[-fipsLevel SP800-131]')
 AdminTask.convertCertForSecurityStandard('[-fipsLevel SP800-131]')
@@ -95,11 +100,6 @@ print "Installing JDBC provider..."
 
 AdminJDBC.createJDBCProvider("DefaultNode01", "server1", "PostgreSQL JDBC Provider", "org.postgresql.jdbc2.optional.ConnectionPool", "classpath=${CUST_PATH}/postgresql-9.4-1206-jdbc42.jar, description='PostgreSQL JDBC Provider', providerType='PostgreSQL JDBC Driver Provider'") 
 AdminConfig.save()
-
-print "Installing application ..."
-
-node = getName(getNodeId(""))
-server = getName(getServerId(""))
 
 print "Installing Hello World ..." 
 
