@@ -93,14 +93,6 @@ AdminConfig.create('HostAlias', AdminConfig.getid('/VirtualHost:default_host/'),
 AdminConfig.create('HostAlias', AdminConfig.getid('/VirtualHost:admin_host/'), '[[port "31240"] [hostname "*"]]')
 AdminConfig.save()
 
-print "Enabling TLS1.2 ..."
-AdminTask.listCertStatusForSecurityStandard('[-fipsLevel SP800-131]')
-AdminTask.convertCertForSecurityStandard('[-fipsLevel SP800-131]')
-AdminTask.enableFips('[-enableFips true -fipsLevel SP800-131]')
-print AdminTask.getFipsInfo()
-AdminConfig.save()	
-
-
 print "Installing Hello World ..." 
 
 parms = "-appname Application"
@@ -121,3 +113,10 @@ parms2 = "-appname SSMServer2"
 parms2 += " -node " + node + " -server " + server
 parms2 += " -nouseMetaDataFromBinary"
 AdminApp.install("/work/config/SSMServer2.ear", [parms2])
+
+print "Enabling TLS1.2 ..."
+AdminTask.listCertStatusForSecurityStandard('[-fipsLevel SP800-131]')
+AdminTask.convertCertForSecurityStandard('[-fipsLevel SP800-131]')
+AdminTask.enableFips('[-enableFips true -fipsLevel SP800-131]')
+print AdminTask.getFipsInfo()
+AdminConfig.save()	
