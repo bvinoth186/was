@@ -74,6 +74,13 @@ print "Starting ..."
 node = getName(getNodeId(""))
 server = getName(getServerId(""))
 
+print "Creating Custom Path Env Variable ..."
+
+AdminTask.setVariable('[-variableName CUST_PATH -variableValue /work/config/ -scope Cell=DefaultCell01]')
+AdminTask.setVariable('[-variableName CUST_PATH -variableValue /work/config/ -scope Node=DefaultNode01]')
+AdminTask.setVariable('[-variableName CUST_PATH -variableValue /work/config/ -scope  Node=DefaultNode01,Server=server1]')
+AdminConfig.save()
+
 print "Enabling TLS1.2 ..."
 AdminTask.listCertStatusForSecurityStandard('[-fipsLevel SP800-131]')
 AdminTask.convertCertForSecurityStandard('[-fipsLevel SP800-131]')
@@ -121,12 +128,6 @@ parms2 = "-appname SSMServer2"
 parms2 += " -node " + node + " -server " + server
 parms2 += " -nouseMetaDataFromBinary"
 AdminApp.install("/work/config/SSMServer2.ear", [parms2])
-
-print "Creating Custom Path Env Variable ..."
-
-AdminTask.setVariable('[-variableName CUST_PATH -variableValue /work/config/ -scope Cell=DefaultCell01]')
-AdminTask.showVariables ('[ -scope Cell=DefaultCell01 -variableName CUST_PATH ]')
-AdminConfig.save()
 
 print "Installing HostAlias ..."
 
