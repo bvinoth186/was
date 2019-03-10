@@ -134,6 +134,14 @@ print jaasAttrs
 AdminConfig.create('JAASAuthData', security, jaasAttrs)
 AdminConfig.save()
 
+jdbcid = AdminConfig.getid('/JDBCProvider:PGres JDBC Driver Provider/')
+print jdbcid
+jdbcPro = AdminConfig.getid('/JDBCProvider:PGres JDBC Driver Provider/')
+dsid = AdminTask.createDatasource(jdbcPro, '[-name "PGresDS" -jndiName jdbc/SelfService -dataStoreHelperClassName com.ibm.websphere.rsadapter.GenericDataStoreHelper -componentManagedAuthenticationAlias DefaultNode01/postgreAuth -containerManagedPersistence true -xaRecoveryAuthAlias DefaultNode01/postgreAuth]')
+print dsid
+mm = AdminConfig.create('MappingModule', dsid , '[[authDataAlias DefaultNode01/postgreAuth] [mappingConfigAlias "DefaultPricipalMapping"]]')
+AdminConfig.save()
+
 print "Enabling TLS1.2 ..."
 AdminTask.listCertStatusForSecurityStandard('[-fipsLevel SP800-131]')
 AdminTask.convertCertForSecurityStandard('[-fipsLevel SP800-131]')
