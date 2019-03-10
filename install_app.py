@@ -99,6 +99,7 @@ parms = "-appname Application"
 parms += " -node " + node + " -server " + server
 parms += " -nouseMetaDataFromBinary"
 app = AdminApp.install("/work/config/app.ear", [parms])
+AdminConfig.save()
 
 print "Installing SSMAdmin ..."
 
@@ -106,6 +107,7 @@ parms1 = "-appname SSMAdmin2"
 parms1 += " -node " + node + " -server " + server
 parms1 += " -nouseMetaDataFromBinary"
 AdminApp.install("/work/config/SSMAdmin2.ear", [parms1])
+AdminConfig.save()
 
 print "Installing SSMServer ..."
 
@@ -113,10 +115,11 @@ parms2 = "-appname SSMServer2"
 parms2 += " -node " + node + " -server " + server
 parms2 += " -nouseMetaDataFromBinary"
 AdminApp.install("/work/config/SSMServer2.ear", [parms2])
+AdminConfig.save()
 
 print "Installing JDBC provider..."
 
-AdminJDBC.createJDBCProvider("DefaultNode01", "server1", "PostgreSQL JDBC Provider", "org.postgresql.jdbc2.optional.ConnectionPool", "classpath=${CUST_PATH}/postgresql-9.4-1206-jdbc42.jar, description='PostgreSQL JDBC Provider', providerType='PostgreSQL JDBC Driver Provider'") 
+AdminTask.createJDBCProvider('[-scope Node=DefaultNode01,Server=server1 -databaseType "User-defined" -providerType "User-defined JDBC Provider" -name "PGres JDBC Driver Provider" -description "PGres JDBC Driver Provider" -implementationClassName org.postgresql.jdbc2.optional.ConnectionPool -classpath ${CUST_PATH}/postgresql-9.4-1206-jdbc42.jar -implementationType "Connection pool data source"]')
 AdminConfig.save()
 
 print "Installing J2C Auth data..."
