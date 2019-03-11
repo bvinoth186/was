@@ -134,12 +134,31 @@ print jaasAttrs
 AdminConfig.create('JAASAuthData', security, jaasAttrs)
 AdminConfig.save()
 
+print "Installing DataSource..."
 jdbcid = AdminConfig.getid('/JDBCProvider:PGres JDBC Driver Provider/')
 print jdbcid
 jdbcPro = AdminConfig.getid('/JDBCProvider:PGres JDBC Driver Provider/')
 dsid = AdminTask.createDatasource(jdbcPro, '[-name "PGresDS" -jndiName jdbc/SelfService -dataStoreHelperClassName com.ibm.websphere.rsadapter.GenericDataStoreHelper -componentManagedAuthenticationAlias DefaultNode01/postgreAuth -containerManagedPersistence true -xaRecoveryAuthAlias DefaultNode01/postgreAuth]')
 print dsid
 mm = AdminConfig.create('MappingModule', dsid , '[[authDataAlias DefaultNode01/postgreAuth] [mappingConfigAlias "DefaultPricipalMapping"]]')
+AdminConfig.save()
+
+print "Installing DS custom property url..."
+dsid = AdminConfig.getid('/DataSource:PGresDS/')
+ps = AdminConfig.showAttribute(dsid,'propertySet')
+j2ps = AdminConfig.list('J2EEResourceProperty', ps)
+name = ['name', 'url']
+type = ['type', 'java.lang.String']
+value = ['value', 'jdbc:postgresql://5a3ec84c-0eb5-49ba-899d-91a9339f02a9.d7deeff0d58745aba57fa5c84685d5b4.databases.appdomain.cloud:32203/ibmclouddb']
+urlProAttrs = [name, type, value]
+print AdminConfig.create('J2EEResourceProperty', ps, urlProAttrs)
+
+print "Installing DS custom property SSL..."
+nameS = ['name', 'ssl']
+typeS = ['type', 'java.lang.String']
+valueS = ['value', 'true']
+sslProAttrs = [nameS, typeS, valueS]
+print AdminConfig.create('J2EEResourceProperty', ps, sslProAttrs)
 AdminConfig.save()
 
 print "Enabling TLS1.2 ..."
