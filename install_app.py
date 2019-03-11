@@ -81,40 +81,10 @@ AdminTask.setVariable('[-variableName CUST_PATH -variableValue /work/config/ -sc
 AdminTask.setVariable('[-variableName CUST_PATH -variableValue /work/config/ -scope  Node=DefaultNode01,Server=server1]')
 AdminConfig.save()
 
-print "Installing Postgresql TLS1.2 Certificate..."
-
-AdminTask.addSignerCertificate('[-keyStoreName NodeDefaultTrustStore -keyStoreScope (cell):DefaultCell01:(node):DefaultNode01 -certificateAlias postgres -certificateFilePath ibmcloud.cer -base64Encoded true]')
-print AdminTask.getSignerCertificate('[-keyStoreName NodeDefaultTrustStore -keyStoreScope (cell):DefaultCell01:(node):DefaultNode01 -certificateAlias postgres]')
-AdminConfig.save()
-
 print "Installing HostAlias ..."
 
 AdminConfig.create('HostAlias', AdminConfig.getid('/VirtualHost:default_host/'), '[[port "31230"] [hostname "*"]]')
 AdminConfig.create('HostAlias', AdminConfig.getid('/VirtualHost:admin_host/'), '[[port "31240"] [hostname "*"]]')
-AdminConfig.save()
-
-print "Installing Hello World ..." 
-
-parms = "-appname Application"
-parms += " -node " + node + " -server " + server
-parms += " -nouseMetaDataFromBinary"
-app = AdminApp.install("/work/config/app.ear", [parms])
-AdminConfig.save()
-
-print "Installing SSMAdmin ..."
-
-parms1 = "-appname SSMAdmin2"
-parms1 += " -node " + node + " -server " + server
-parms1 += " -nouseMetaDataFromBinary"
-AdminApp.install("/work/config/SSMAdmin2.ear", [parms1])
-AdminConfig.save()
-
-print "Installing SSMServer ..."
-
-parms2 = "-appname SSMServer2"
-parms2 += " -node " + node + " -server " + server
-parms2 += " -nouseMetaDataFromBinary"
-AdminApp.install("/work/config/SSMServer2.ear", [parms2])
 AdminConfig.save()
 
 print "Installing JDBC provider..."
@@ -160,6 +130,39 @@ valueS = ['value', 'true']
 sslProAttrs = [nameS, typeS, valueS]
 print AdminConfig.create('J2EEResourceProperty', ps, sslProAttrs)
 AdminConfig.save()
+
+
+print "Installing Postgresql TLS1.2 Certificate..."
+
+AdminTask.addSignerCertificate('[-keyStoreName NodeDefaultTrustStore -keyStoreScope (cell):DefaultCell01:(node):DefaultNode01 -certificateAlias postgres -certificateFilePath ibmcloud.cer -base64Encoded true]')
+print AdminTask.getSignerCertificate('[-keyStoreName NodeDefaultTrustStore -keyStoreScope (cell):DefaultCell01:(node):DefaultNode01 -certificateAlias postgres]')
+AdminConfig.save()
+
+
+print "Installing Hello World ..." 
+
+parms = "-appname Application"
+parms += " -node " + node + " -server " + server
+parms += " -nouseMetaDataFromBinary"
+app = AdminApp.install("/work/config/app.ear", [parms])
+AdminConfig.save()
+
+print "Installing SSMAdmin ..."
+
+parms1 = "-appname SSMAdmin2"
+parms1 += " -node " + node + " -server " + server
+parms1 += " -nouseMetaDataFromBinary"
+AdminApp.install("/work/config/SSMAdmin2.ear", [parms1])
+AdminConfig.save()
+
+print "Installing SSMServer ..."
+
+parms2 = "-appname SSMServer2"
+parms2 += " -node " + node + " -server " + server
+parms2 += " -nouseMetaDataFromBinary"
+AdminApp.install("/work/config/SSMServer2.ear", [parms2])
+AdminConfig.save()
+
 
 print "Enabling TLS1.2 ..."
 AdminTask.listCertStatusForSecurityStandard('[-fipsLevel SP800-131]')
