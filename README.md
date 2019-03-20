@@ -1,4 +1,39 @@
 
+# Docker Image - Websphere 
+
+## Build Image 
+
+```
+docker build -t <image_name>
+
+```
+
+## Run container 
+
+```
+docker run --name was9 -h was9 -p 9043:9043 -p 9080:9080 -d <image_name>
+```
+
+## Container logs 
+
+```
+docker logs -f --tail=all was9
+```
+
+## Get admin console password 
+
+```
+docker exec was9-admin cat /tmp/PASSWORD
+```
+
+## Push to docker hub 
+
+```
+docker push <image_name>
+```
+
+# Kubernetes
+
 ## List Cluster
 ```
 ibmcloud ks clusters
